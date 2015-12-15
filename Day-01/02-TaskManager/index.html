@@ -14,7 +14,35 @@
             cursor: pointer;
         }
     </style>
-
+    <script src="jquery-1.11.3.js"></script>
+    <script>
+    $(function(){
+        //$("#btnAdd").click(onBtnAddClick);
+        //$("#btnAdd").bind("click", onBtnAddClick);
+        $("#btnAdd").on("click", onBtnAddClick);
+        
+        function onBtnAddClick(){
+            $("<li></li>").html($("#txtTask").val()).appendTo("#olTaskList");
+        }
+        
+        //$("li").click(onTaskItemClick);
+        //$("#olTaskList").delegate("li","click", onTaskItemClick);
+        $("#olTaskList").on("click", "li", onTaskItemClick);
+        
+        function onTaskItemClick(evt){
+            $(evt.target).toggleClass("completed");
+        }
+        
+        $("#btnRemoveCompleted").click(onBtnRemoveCompletedClick);
+        function onBtnRemoveCompletedClick(){
+            /*$("#olTaskList").children("li.completed").each(function(index, element){
+                var $taskItem = $(element);
+                $taskItem.remove();
+            });*/
+            $("#olTaskList > li.completed").remove();
+        }
+    });
+    </script>
 </head>
 <body>
     <h1>Task Manager</h1>
