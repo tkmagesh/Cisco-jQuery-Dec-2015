@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Calculator</title>
+    <style>
+        .invalid{
+            border : 2px solid red;
+            background-color: bisque;
+        }
+    </style>
     <script src="jquery-1.11.3.js"></script>
     <script>
-        window.addEventListener("DOMContentLoaded", init);
-        
-        function init(){
-            var btnAdd = document.getElementById("btnAdd");
-            btnAdd.addEventListener("click", onBtnAddClick);
-        }
-        
-        function onBtnAddClick(){
-            var txtNumber1 = document.getElementById("txtNumber1");
-            var txtNumber2 = document.getElementById("txtNumber2");
-            var number1 = parseInt(txtNumber1.value, 10);
-            var number2 = parseInt(txtNumber2.value, 10);
-            var result = number1 + number2;
-            var divResult = document.getElementById("divResult");
-            divResult.innerHTML = result;
-        }
+        $(function init(){
+
+            $("#btnAdd").click(onBtnAddClick);
+
+            function onBtnAddClick(){
+                var $txtNumber1 = $("#txtNumber1"),
+                    $txtNumber2 = $("#txtNumber2");
+                $txtNumber1.toggleClass("invalid", $txtNumber1.val() === '');
+                $txtNumber2.toggleClass("invalid", $txtNumber2.val() === '');
+                if ($(".invalid").length !== 0 ) return;
+                var number1 = parseInt($txtNumber1.val(), 10);
+                var number2 = parseInt($txtNumber2.val(), 10);
+                var result = number1 + number2;
+                $("#divResult").html(result);
+                var displayStyle = {
+                    fontSize : $("#txtFontSize").val() + 'pt'
+                }
+                $("#divResult").css(displayStyle);
+            }
+        });
+
+
+
+
     </script>
 </head>
 <body>
     <h1>Calculator</h1>
+    <label for="">font size :</label>
+    <input type="text" name="" id="txtFontSize">
     <hr>
     <input type="text" name="" id="txtNumber1">
     <input type="text" name="" id="txtNumber2">
