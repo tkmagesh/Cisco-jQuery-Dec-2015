@@ -11,24 +11,32 @@
     </style>
     <script src="jquery-1.11.3.js"></script>
     <script>
+        String.prototype.toInt = function(){
+            return parseInt(this,10);
+        };
+
         $(function init(){
+            /*var $txtNumber1 = $("#txtNumber1"),
+                $txtNumber2 = $("#txtNumber2");*/
+
+            //$("#txtNumber1, #txtNumber2").blur(onTxtNumberBlur);
+            //$("input[type=text]").blur(onTxtNumberBlur);
+            //$("input:text").blur(onTxtNumberBlur);
+            $(":text").blur(onTxtNumberBlur);
+
+            function onTxtNumberBlur(evt){
+                //var $txtBox = $(evt.target);
+                $(evt.target).toggleClass("invalid", evt.target.value === '');
+            }
 
             $("#btnAdd").click(onBtnAddClick);
-
             function onBtnAddClick(){
-                var $txtNumber1 = $("#txtNumber1"),
-                    $txtNumber2 = $("#txtNumber2");
-                $txtNumber1.toggleClass("invalid", $txtNumber1.val() === '');
-                $txtNumber2.toggleClass("invalid", $txtNumber2.val() === '');
+                $(":text").blur();
                 if ($(".invalid").length !== 0 ) return;
-                var number1 = parseInt($txtNumber1.val(), 10);
-                var number2 = parseInt($txtNumber2.val(), 10);
+                var number1 = $("#txtNumber1").val().toInt();
+                var number2 = $("#txtNumber2").val().toInt();
                 var result = number1 + number2;
                 $("#divResult").html(result);
-                var displayStyle = {
-                    fontSize : $("#txtFontSize").val() + 'pt'
-                }
-                $("#divResult").css(displayStyle);
             }
         });
 
