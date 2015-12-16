@@ -10,7 +10,7 @@
             font-style: italic;
             font-weight: bold;
         }
-        li{
+        h3, li{
             cursor: pointer;
         }
         #divToastContainer{
@@ -34,16 +34,27 @@
 
         $("#btnAdd").on("click", onBtnAddClick);
 
+        function toggleCategorySections(){
+             $(".category").hide();
+             $("ol:has(li)").parent("div.category").show();
+            //$("div ol>li").toggle($("div ol>li").length > 0);
+        }
+        toggleCategorySections();
         function onBtnAddClick(){
-            $("<li></li>")
+            var $ol = $("div").filter('.' + $("#selectCategory").val()).children("ol");
+            var $listItem = $("<li></li>")
                 .html($("#txtTask").val())
                 .hide()
-                .prependTo("#olTaskList")
-                .slideDown();
+                .prependTo($ol);
+            toggleCategorySections();
+            $listItem.slideDown();
             displayToast("A new task is added");
         }
 
-        $("#olTaskList").on("click", "li", onTaskItemClick);
+        $("ol.taskList").on("click", "li", onTaskItemClick);
+        $("div.category > h3").click(function(){
+            $(this).next("ol").slideToggle();
+        });
 
         function onTaskItemClick(evt){
             $(evt.target).toggleClass("completed");
@@ -51,9 +62,10 @@
 
         $("#btnRemoveCompleted").click(onBtnRemoveCompletedClick);
         function onBtnRemoveCompletedClick(){
-            $("#olTaskList > li.completed").fadeOut(function(){
+            $("ol.taskList > li.completed").fadeOut(function(){
                 $(this).remove();
                 displayToast("Zero or more completed tasks are removed");
+                toggleCategorySections();
             });
         }
 
@@ -78,6 +90,8 @@
                     $(this).remove();
                 });
         }
+
+
     });
     </script>
 </head>
@@ -94,10 +108,23 @@
         </select>
         <input type="button" value="Add Task" id="btnAdd">
         <input type="button" value="Remove Completed" id="btnRemoveCompleted">
-        <ol id="olTaskList">
-            <li>Watch a movie</li>
-            <li class="completed">Plan for vacation</li>
-        </ol>
+        <div class="category Personal">
+            <h3>Personal</h3>
+            <ol class="taskList">
+            </ol>
+        </div>
+        <div class="category Official">
+            <h3>Official</h3>
+            <ol class="taskList">
+
+            </ol>
+        </div>
+        <div class="category Recreational">
+            <h3>Recreational</h3>
+            <ol class="taskList">
+
+            </ol>
+        </div>
         <div id="divToastContainer"></div>
 
     </div>
