@@ -3,10 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Ajax Demo</title>
+    <style>
+        .completed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+    </style>
     <script src="jquery-1.11.3.js"></script>
+
+    <script>
+    $(function(){
+       $("#btnLoadHtml").click(function(){
+          /*$.get("htmlFragment.html", function(response){
+              $("#content").append(response);
+          } ,"html")*/
+           $("#content").load("htmlFragment.html");
+       });
+       $("#btnLoadTasks").click(function(){
+           $.get("/tasks", function(data){
+               $(data).each(createTask);
+           },"json");
+       });
+
+       $("#ajaxProgress").hide();
+       $(document).ajaxStart(function(){
+           $("#ajaxProgress").show();
+       }).ajaxComplete(function(){
+           $("#ajaxProgress").hide();
+       });
+
+       function createTask(index, taskObj){
+           $("<li></li>")
+            .html(taskObj.name)
+            .attr("task-id", taskObj.id)
+            .toggleClass("completed", taskObj.isCompleted)
+            .appendTo("#olTaskList");
+
+       }
+       $("#olTaskList").on("click","li", function(evt){
+           var $taskItem = $(evt.target);
+           $taskItem.toggleClass("completed");
+           var actionUrl = "/tasks/" + $taskItem.attr("task-id");
+           var updateData = {
+               isCompleted : $taskItem.hasClass("completed")
+           };
+           $.ajax({
+               method : 'PUT',
+               url : actionUrl,
+               data : JSON.stringify(updateData),
+               dataType : 'json',
+               contentType : 'application/json',
+               success : function(response){
+                   $taskItem.toggleClass("completed", response.isCompleted);
+               }
+           });
+       })
+       $("#btnAdd").click(function(){
+           var taskName = $("#txtTask").val();
+           var newTask = {
+               id : 0,
+               name : taskName,
+               isCompleted : false
+           }
+           $.post("/tasks",newTask, function(response){
+               createTask(null, response);
+           },"json");
+       })
+    });
+    </script>
 </head>
 <body>
+    <div id="ajaxProgress"><img src="ajax.gif" alt=""><span>Loading..!!</span></div>
     <input type="button" value="Load HTML" id="btnLoadHtml">
     <div id="content"></div>
+    <input type="button" value="Load Tasks" id="btnLoadTasks">
+    <div>
+        <label for="">Task :</label>
+        <input type="text" name="" id="txtTask">
+        <input type="button" value="Add" id="btnAdd">
+    </div>
+    <ol id="olTaskList">
+
+    </ol>
+    <div id="divMessage"></div>
 </body>
 </html>

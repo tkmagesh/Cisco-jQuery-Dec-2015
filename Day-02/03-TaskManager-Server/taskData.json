@@ -3,16 +3,31 @@
     {
       "id": 1,
       "name": "Learn jQuery",
-      "isCompleted": true
+      "isCompleted": false
     },
     {
       "id": 2,
       "name": "Explore JavaScript",
-      "isCompleted": false
+      "isCompleted": true
     },
     {
       "id": 3,
       "name": "Master Angular.js",
+      "isCompleted": true
+    },
+    {
+      "id": 4,
+      "name": "Study Ajax",
+      "isCompleted": false
+    },
+    {
+      "id": 5,
+      "name": "Plan for vacation",
+      "isCompleted": false
+    },
+    {
+      "id": 6,
+      "name": "try ajax gif",
       "isCompleted": false
     }
   ]
