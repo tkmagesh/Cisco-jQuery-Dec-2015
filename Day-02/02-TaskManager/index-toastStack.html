@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <style>
+        .completed{
+            color : red;
+            text-decoration: line-through;
+            font-style: italic;
+            font-weight: bold;
+        }
+        li{
+            cursor: pointer;
+        }
+        #divToastContainer{
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+        }
+        .toastMessage{
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid gray;
+            font-weight: bold;
+            border-radius: 5px;
+            background-color: #e7e7e7;
+        }
+    </style>
+    <script src="jquery-1.11.3.js"></script>
+    <script>
+    $(function(){
+
+
+        $("#btnAdd").on("click", onBtnAddClick);
+
+        function onBtnAddClick(){
+            $("<li></li>")
+                .html($("#txtTask").val())
+                .hide()
+                .prependTo("#olTaskList")
+                .slideDown();
+            displayToast("A new task is added");
+        }
+
+        $("#olTaskList").on("click", "li", onTaskItemClick);
+
+        function onTaskItemClick(evt){
+            $(evt.target).toggleClass("completed");
+        }
+
+        $("#btnRemoveCompleted").click(onBtnRemoveCompletedClick);
+        function onBtnRemoveCompletedClick(){
+            $("#olTaskList > li.completed").fadeOut(function(){
+                $(this).remove();
+                displayToast("Zero or more completed tasks are removed");
+            });
+        }
+
+        function displayMessage(msg){
+            $("#divMessage")
+                .hide()
+                .html(msg)
+                .fadeIn('slow')
+                .delay(3000)
+                .fadeOut('fast');
+        }
+
+        function displayToast(msg){
+            $("<div></div>")
+                .hide()
+                .addClass("toastMessage")
+                .appendTo("#divToastContainer")
+                .html(msg)
+                .slideDown('slow')
+                .delay(3000)
+                .fadeOut('slow', function(){
+                    $(this).remove();
+                });
+        }
+    });
+    </script>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <hr>
+    <div class="content">
+        <label for="">Task :</label>
+        <input type="text" name="" id="txtTask">
+        <select name="" id="selectCategory">
+            <option value="Personal">Personal</option>
+            <option value="Official">Official</option>
+            <option value="Recreational">Recreational</option>
+        </select>
+        <input type="button" value="Add Task" id="btnAdd">
+        <input type="button" value="Remove Completed" id="btnRemoveCompleted">
+        <ol id="olTaskList">
+            <li>Watch a movie</li>
+            <li class="completed">Plan for vacation</li>
+        </ol>
+        <div id="divToastContainer"></div>
+
+    </div>
+</body>
+</html>
