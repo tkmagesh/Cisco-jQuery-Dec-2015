@@ -13,6 +13,17 @@
         li{
             cursor: pointer;
         }
+        #divToast{
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid gray;
+            font-weight: bold;
+            border-radius: 5px;
+            background-color: #e7e7e7;
+        }
     </style>
     <script src="jquery-1.11.3.js"></script>
     <script>
@@ -27,7 +38,7 @@
                 .hide()
                 .prependTo("#olTaskList")
                 .slideDown();
-            displayMessage("A new task is added");
+            displayToast("A new task is added");
         }
 
         $("#olTaskList").on("click", "li", onTaskItemClick);
@@ -40,7 +51,7 @@
         function onBtnRemoveCompletedClick(){
             $("#olTaskList > li.completed").fadeOut(function(){
                 $(this).remove();
-                displayMessage("Zero or more completed tasks are removed");
+                displayToast("Zero or more completed tasks are removed");
             });
         }
 
@@ -53,6 +64,15 @@
                 .fadeIn('slow')
                 .delay(3000)
                 .fadeOut('fast');
+        }
+        $("#divToast").hide();
+        function displayToast(msg){
+            $("#divToast")
+                .hide()
+                .html(msg)
+                .slideDown('slow')
+                .delay(3000)
+                .slideUp('slow');
         }
     });
     </script>
@@ -70,6 +90,7 @@
             <li class="completed">Plan for vacation</li>
         </ol>
         <div id="divMessage"></div>
+        <div id="divToast"></div>
     </div>
 </body>
 </html>
